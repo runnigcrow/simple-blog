@@ -4,15 +4,23 @@ const bodyParser 		= require("body-parser");
 const methodOverride	= require("method-override")
 const expressSanitizer	= require("express-sanitizer")
 const app				= express();
+const db 		 		= require("./dbconfig.js");
 
 //APP CONFIG
-mongoose.connect('mongodb://localhost:27017/restful_blog_app', { //add database and connect to mongoose
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('Connected to DB!'))
-.catch(err => console.log(err.message));
-mongoose.set('useFindAndModify', false);
+
+var dbKey = db();
+mongoose.connect("mongodb+srv://"+dbKey+"/blogDB?retryWrites=true&w=majority", {
+  	useNewUrlParser: true,
+  	CreateIndex:true,
+	useUnifiedTopology: true,
+}).then(() => console.log('Connected to DB!')).catch(error => console.log(error.message));
+// mongoose.connect('mongodb://localhost:27017/restful_blog_app', { //add database and connect to mongoose
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+// .then(() => console.log('Connected to DB!'))
+// .catch(err => console.log(err.message));
+// mongoose.set('useFindAndModify', false);
 
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended: true}));
